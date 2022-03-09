@@ -1,0 +1,5 @@
+TestNo,TestName
+1,triangle.BranchCoverage
+2,triangle.MutantCoverage
+3,triangle.StatementCoverage
+4,triangle.TriangleTest
