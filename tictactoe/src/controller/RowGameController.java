@@ -40,15 +40,50 @@ public class RowGameController {
 	 * @param block The block to be moved to by the current player
 	 */
 	public void move(JButton block) {
-		if (gameModel.movesLeft < 0) {
-			return;
+		int[] arrVals = getCorrectArrValues(block);
+		int x = arrVals[0];
+		int y = arrVals[1];
+
+		if (gameModel.blocksData[x][y].getContents().equals("")) {
+			gameModel.blocksData[x][y].setContents(getPlayerSymbol(gameModel.isPlayerOneTurn()));
+			gameView.updateBlock(gameModel, x, y);
+			gameModel.movesLeft--;
+
+			adjustPlayerIndicator();
+			checkWin();
+
+			gameModel.switchPlayers();
 		}
-		gameModel.movesLeft--;
+	}
+
+	private void adjustPlayerIndicator() {
 		if (gameModel.movesLeft % 2 == 1) {
 			gameView.playerturn.setText("'X': Player 1");
 		} else {
 			gameView.playerturn.setText("'O': Player 2");
 		}
+	}
+
+	private String getPlayerSymbol(boolean s) {
+		return s ? "X" : "O";
+	}
+
+	/**
+	 * Finds the correct button/block in the array
+	 */
+
+	private int[] getCorrectArrValues(JButton block) {
+		int[] toReturn = { -1, -1 };
+		for (int x = 0; x < 3; x++) {
+			for (int y = 0; y < 3; y++) {
+				if (block == gameView.blocks[x][y]) {
+					toReturn[0] = x;
+					toReturn[1] = y;
+					return toReturn;
+				}
+			}
+		}
+		return toReturn;
 	}
 
 	/**
@@ -64,7 +99,9 @@ public class RowGameController {
 				String temp2 = gameModel.blocksData[x][2].getContents();
 				if (temp0.equals(temp1) && temp0.equals(temp2)) {
 					endGame();
-					gameModel.setFinalResult(getWinningPlayer(center));
+					gameModel.setFinalResult(getWinningPlayer(temp2));
+					gameView.playerturn.setText(gameModel.getFinalResult());
+					return;
 				}
 			}
 			if (!gameModel.blocksData[0][x].getContents().equals("")) {
@@ -73,7 +110,9 @@ public class RowGameController {
 				String temp2 = gameModel.blocksData[2][x].getContents();
 				if (temp0.equals(temp1) && temp0.equals(temp2)) {
 					endGame();
-					gameModel.setFinalResult(getWinningPlayer(center));
+					gameModel.setFinalResult(getWinningPlayer(temp2));
+					gameView.playerturn.setText(gameModel.getFinalResult());
+					return;
 				}
 			}
 		}
@@ -83,27 +122,35 @@ public class RowGameController {
 		String udr = gameModel.blocksData[0][2].getContents();
 		String ldl = gameModel.blocksData[2][0].getContents();
 		String ldr = gameModel.blocksData[2][2].getContents();
-		String center = gameModel.blocksData[1][1].getContents();
+		String cnt = gameModel.blocksData[1][1].getContents();
 
-		if (!center.equals("")) {
-			if (udl.equals(center) && ldr.equals(ldr)) {
+		if (!cnt.equals("")) {
+			if (udl.equals(cnt) && ldr.equals(cnt)) {
 				endGame();
-				gameModel.setFinalResult(getWinningPlayer(center));
-			} else if (udr.equals(center) && ldl.equals(ldr)) {
+				gameModel.setFinalResult(getWinningPlayer(cnt));
+				gameView.playerturn.setText(gameModel.getFinalResult());
+				return;
+			} else if (udr.equals(cnt) && ldl.equals(cnt)) {
 				endGame();
-				gameModel.setFinalResult(getWinningPlayer(center));
+				gameModel.setFinalResult(getWinningPlayer(cnt));
+				gameView.playerturn.setText(gameModel.getFinalResult());
+				return;
 			}
 		}
 
 		// Check for a Tie
 		String toCheck = "";
-		for (RowBlockModel r : gameModel.blocksData) {
-			toCheck += r.getContents();
+		for (RowBlockModel[] rr : gameModel.blocksData) {
+			for (RowBlockModel r : rr) {
+				toCheck += r.getContents();
+			}
 		}
 
-		if (toCheck.length() == 0) {
+		if (toCheck.length() == 9) {
 			endGame();
 			gameModel.setFinalResult(RowGameModel.GAME_END_NOWINNER);
+			gameView.playerturn.setText(gameModel.getFinalResult());
+			return;
 		}
 	}
 
@@ -137,7 +184,7 @@ public class RowGameController {
 				gameView.updateBlock(gameModel, row, column);
 			}
 		}
-		gameModel.player = "1";
+		gameModel.setIsPlayerOneTurn(true);
 		gameModel.movesLeft = 9;
 		gameModel.setFinalResult(null);
 		gameView.playerturn.setText("Player 1 to play 'X'");

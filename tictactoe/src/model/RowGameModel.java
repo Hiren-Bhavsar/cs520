@@ -10,7 +10,7 @@ public class RowGameModel
     /**
      * The current player taking their turn
      */
-    private boolean isPlayerOneTurn = false;
+    private boolean isPlayerOneTurn = true;
     public int movesLeft = 9;
 
     private String finalResult = null;
