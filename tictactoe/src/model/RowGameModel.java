@@ -41,4 +41,8 @@ public class RowGameModel
     public void switchPlayers(){
         this.isPlayerOneTurn = !(this.isPlayerOneTurn);
     }
+
+    public void setIsPlayerOneTurn(boolean isTurn){
+        this.isPlayerOneTurn = isTurn;
+    }
 }
