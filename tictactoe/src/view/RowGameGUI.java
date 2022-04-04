@@ -34,6 +34,8 @@ public class RowGameGUI {
         JPanel messages = new JPanel(new FlowLayout());
         messages.setBackground(Color.white);
 
+        playerturn.setEditable(false);
+
         gui.add(gamePanel, BorderLayout.NORTH);
         gui.add(options, BorderLayout.CENTER);
         gui.add(messages, BorderLayout.SOUTH);
