@@ -10,7 +10,7 @@ public class RowGameModel
     /**
      * The current player taking their turn
      */
-    public String player = "1";
+    private boolean isPlayerOneTurn = false;
     public int movesLeft = 9;
 
     private String finalResult = null;
@@ -32,5 +32,13 @@ public class RowGameModel
 
     public void setFinalResult(String finalResult) {
 	this.finalResult = finalResult;
+    }
+
+    public boolean isPlayerOneTurn(){
+        return this.isPlayerOneTurn;
+    }
+
+    public void switchPlayers(){
+        this.isPlayerOneTurn = !(this.isPlayerOneTurn);
     }
 }
