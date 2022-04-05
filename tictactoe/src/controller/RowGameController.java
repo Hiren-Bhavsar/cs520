@@ -56,6 +56,9 @@ public class RowGameController {
 		}
 	}
 
+	/**
+	 * Adjusts what 'component c' should display
+	 */
 	private void adjustPlayerIndicator() {
 		if (gameModel.movesLeft % 2 == 1) {
 			gameView.playerturn.setText("'X': Player 1");
@@ -70,6 +73,7 @@ public class RowGameController {
 
 	/**
 	 * Finds the correct button/block in the array
+	 * Returns {-1, -1} if block/button is not found.
 	 */
 
 	private int[] getCorrectArrValues(JButton block) {
@@ -154,6 +158,11 @@ public class RowGameController {
 		}
 	}
 
+	/**
+	 * 
+	 * @param s
+	 * @return The phrase of the winning player
+	 */
 	private String getWinningPlayer(String s) {
 		if (s.toLowerCase().equals("o")) {
 			return playerTwoWinPhrase;
